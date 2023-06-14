@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const Button = ({text, color = '#EC563B', textColor = '#FFF', onPress, style = {}}) => {
+const Button = ({text, color = '#1f69ff', textColor = '#FFF', onPress, style = {}}) => {
   return (
     <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
       <View style={{...style, ...styles.container, backgroundColor: color}}>
@@ -15,13 +15,12 @@ export default Button;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: color,
     padding: 8,
-    // borderRadius: 8,
+    borderRadius: 20,
   },
   text: {
-    fontSize: 14,
-    // color: textColor,
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });

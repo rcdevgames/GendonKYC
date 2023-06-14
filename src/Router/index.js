@@ -16,6 +16,7 @@ export default () => {
                     fontWeight: 'bold'
                 }
             }}
+            initialRouteName="HomePage"
         >
             <Stack.Screen 
                 name="HomePage"

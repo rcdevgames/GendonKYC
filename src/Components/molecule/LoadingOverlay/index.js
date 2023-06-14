@@ -14,7 +14,7 @@ const LoadingOverlay = () => {
     return (
       <View style={styles.loading}>
         <View style={styles.container}>
-          <ActivityIndicator size="large" color={'#EC563B'} />
+          <ActivityIndicator size="large" color={'#1f69ff'} />
           <Text style={styles.textLoading}>Loading ...</Text>
         </View>
       </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
     },
     textLoading: {
-      color: '#EC563B',
+      color: '#1f69ff',
       marginTop: 5,
       fontSize: 14,
       fontWeight: 'bold',

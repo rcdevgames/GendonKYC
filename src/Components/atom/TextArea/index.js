@@ -23,12 +23,10 @@ const TextArea = ({control, name, placeholder="", rules={}, defaultValue=""}) =>
         textAlignVertical='top'
         multiline={true}
         style={{
-            // flex: 1,
-            borderWidth: 1,
-            borderRadius: 5,
-            // borderColor: 'grey',
-            // backgroundColor: '#DEDEDE',
+            borderRadius: 15,
+            backgroundColor: '#e9f0ff',
             paddingHorizontal: 15,
+            marginTop: 5,
             color: 'black'
         }}
     />;

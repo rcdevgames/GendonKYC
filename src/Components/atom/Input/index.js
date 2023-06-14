@@ -22,14 +22,11 @@ const Input = ({control, name, placeholder="", rules={}, defaultValue="", keyboa
         secureTextEntry={isPassword}
         ref={ref} 
         style={{
-            // flex: 1,
-            borderWidth: 1,
-            borderRadius: 5,
-            // borderColor: 'grey',
-            // backgroundColor: '#DEDEDE',
+            borderRadius: 15,
+            backgroundColor: '#e9f0ff',
             paddingHorizontal: 15,
             height: 42,
-            marginTop: 2,
+            marginTop: 5,
             color: 'black'
         }}
         keyboardType={keyboardType}
