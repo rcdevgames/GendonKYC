@@ -29,7 +29,7 @@ export default StyleSheet.create({
     maskWrapper: {
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     mask: {
@@ -39,5 +39,27 @@ export default StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         borderColor: '#FFF'
+    },
+    ktp: {
+        width: wp(66),
+        height: wp(35),
+        backgroundColor: '#000',
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: '#FFF'
+    },
+    person: {
+        width: wp(40),
+        height: wp(50),
+        backgroundColor: '#000',
+        borderRadius: wp(40),
+        borderWidth: 1,
+        borderColor: '#FFF'
+    },
+    validationText: {
+        fontSize: wp(3),
+        color: 'red',
+        marginLeft: 15,
+        marginTop: 3
     },
 })

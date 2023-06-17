@@ -8,51 +8,51 @@ import { useToast } from 'react-native-toast-notifications';
 import { Picker } from '@react-native-picker/picker';
 import { IMG_ExampleKTP, IMG_ExampleSelfie, IMG_Hore, IMG_VerifyKTP } from '../Assets';
 import {setLoading} from '../Components';
+import { insertBiodata } from '../Provider';
 
-export default ({navigation}) => {
+export default ({navigation, route}) => {
     const toast = useToast();
     const { control, handleSubmit, formState: { errors }, setValue } = useForm();
 
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(route.params?.step || 1);
 
     useEffect(() => {
+        // setStep(3);
         navigation.setOptions({
             title: "Verifikasi Akun Bangbeli"
         });
-        setValue("ktp", null);
-        setValue("selfie", null);
-
-        // const unsubscribe = navigation.addListener("beforeRemove", e => {
-        //     console.log(step)
-        //     // if (step == 1) return;
-        //     // setStep(step - 1);
-        //     // Prevent default behavior of leaving the screen
-        //     e.preventDefault();
-        // });
-      
-        // return unsubscribe;
     }, [navigation]);
 
-    const callbackCamera = (base64, type) => {
-        if (type === "KTP") {
-            setValue("ktp", base64);
-            setStep(3);
-        }else if (type === "SELFIE") {
-            setValue("selfie", base64);
-            handleSubmit(doSave)();
+    const callbackCamera = async (uri, type) => {
+        setLoading(true);
+        try {
+            const res = await uploadFoto(uri, type.toLowerCase());
+            console.log(res);
+            setLoading(false);
+            if (type === "KTP") {
+                setStep(3);
+            }else if (type === "SELFIE") {
+                navigation.navigate("ResultPage", {status: "WAITING"});
+            }
+        } catch (error) {
+            console.log(error)
+            toast.show(error);
+            setLoading(false);
         }
-        console.log("DONE", type)
     }
 
-    const doSave = async data => {
+    const submitBio = async data => {
         setLoading(true);
-        console.log(data);
-
-        setTimeout(() => {
+        try {
+            const res = await insertBiodata(data);
+            console.log(res);
             setLoading(false);
-            navigation.navigate("ResultPage", {status: 'wait'});
-        }, 3000);
-
+            setStep(2);
+        } catch (error) {
+            console.log(error)
+            toast.show(error);
+            setLoading(false);
+        }
     }
 
     return (
@@ -88,11 +88,13 @@ export default ({navigation}) => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Text style={{fontSize: 17}}>Masukan data e-KTP</Text>
                     <Text style={{fontSize: 12, color: '#7A7A7A'}}>Pastikan data yang kamu masukkan sudah benar dan sesuai dengan KTP mu, agar verfikasi berhasil.</Text>
-
+                    {console.log(errors)}
                     <Text style={{marginTop: 10}}>NIK</Text>
-                    <Input control={control} name="nik" defaultValue="" placeholder="Masukan NIK sesuai e-KTP kamu"/>
+                    <Input control={control} name="nik" defaultValue="" placeholder="Masukan NIK sesuai e-KTP kamu" rules={{ required: "Harus di isi!", pattern: {value: /^.{16}$/, message: "Harus 16 Digit!" }}} keyboardType="number-pad"/>
+                    {errors.nik && <Text style={styles.validationText}>{errors.nik.message}</Text>}
                     <Text style={{marginTop: 10}}>Nama Lengkap</Text>
-                    <Input control={control} name="nama_lengkap" defaultValue="" placeholder="Masukan nama lengkap sesuai e-KTP kamu"/>
+                    <Input control={control} name="name" defaultValue="" placeholder="Masukan nama lengkap sesuai e-KTP kamu" rules={{ required: "Harus di isi!" }}/>
+                    {errors.name && <Text style={styles.validationText}>{errors.name.message}</Text>}
                     <Text style={{marginTop: 10}}>Jenis Kelamin</Text>
                     <View style={{
                         borderRadius: 15,
@@ -104,7 +106,8 @@ export default ({navigation}) => {
                         <Controller
                             control={control}
                             defaultValue={null}
-                            name="jenis_kelamin"
+                            name="gender"
+                            rules={{ required: "Harus di isi!" }}
                             render={({
                                 field: { onChange, onBlur, value, name, ref },
                                 fieldState: { invalid, isTouched, isDirty, error },
@@ -120,8 +123,10 @@ export default ({navigation}) => {
                             )}
                         />
                     </View>
+                    {errors.gender && <Text style={styles.validationText}>{errors.gender.message}</Text>}
                     <Text style={{marginTop: 10}}>Alamat</Text>
-                    <TextArea control={control} name="alamat" defaultValue="" placeholder="Masukan alamat sesuai e-KTP kamu"/>
+                    <TextArea control={control} name="address" defaultValue="" placeholder="Masukan alamat sesuai e-KTP kamu" rules={{ required: "Harus di isi!" }}/>
+                    {errors.address && <Text style={styles.validationText}>{errors.address.message}</Text>}
                     <Text style={{marginTop: 10}}>Agama</Text>
                     <View style={{
                         borderRadius: 15,
@@ -133,7 +138,8 @@ export default ({navigation}) => {
                         <Controller
                             control={control}
                             defaultValue={null}
-                            name="agama"
+                            name="religi"
+                            rules={{ required: "Harus di isi!" }}
                             render={({
                                 field: { onChange, onBlur, value, name, ref },
                                 fieldState: { invalid, isTouched, isDirty, error },
@@ -151,10 +157,12 @@ export default ({navigation}) => {
                             )}
                         />
                     </View>
+                    {errors.religi && <Text style={styles.validationText}>{errors.religi.message}</Text>}
                     <Text style={{marginTop: 10}}>Pekerjaan</Text>
-                    <Input control={control} name="pekerjaan" defaultValue="" placeholder="Masukan pekerjaan lengkap sesuai e-KTP kamu"/>
+                    <Input control={control} name="work" defaultValue="" placeholder="Masukan pekerjaan lengkap sesuai e-KTP kamu" rules={{ required: "Harus di isi!" }}/>
+                    {errors.work && <Text style={styles.validationText}>{errors.work.message}</Text>}
                 </ScrollView>
-                <Button text="Lanjutkan" style={{margin: 16}} onPress={() => setStep(2)}/>
+                <Button text="Lanjutkan" style={{margin: 16}} onPress={handleSubmit(submitBio)}/>
             </View>}
             {step == 2 && <View style={{flex: 1, paddingHorizontal: 16}}>
                     <Text style={{fontSize: 17}}>Verifikasi e-KTP</Text>

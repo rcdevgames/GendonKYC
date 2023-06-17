@@ -6,17 +6,17 @@ import styles from './style';
 import { widthPercentageToDP as wp } from '../Utils/responsive';
 
 export default ({navigation, route}) => {
-    let status = route.params?.status || 'wait';
+    let status = route.params?.status || 'WAITING';
     let data = {
-        "wait": {
+        "WAITING": {
             "image": IMG_Process,
             "btn_label": "Selesai"
         },
-        "approved": {
+        "APPROVED": {
             "image": IMG_Approved,
             "btn_label": "Mulai"
         },
-        "reject": {
+        "REJECTED": {
             "image": IMG_Reject,
             "btn_label": "Coba Lagi"
         },

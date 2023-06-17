@@ -23,18 +23,27 @@ export default ({navigation, route, initialProps}) => {
         "KTP": {
             "label": "Posisikan e-KTP kamu didalam bingkai dan ambil foto.",
             "label2": "Pastikan Foto e-KTP kamu sudah jelas dan tidak blur.",
-            "frame": null
+            "frame": (
+                <View style={styles.maskWrapper}>
+                    <View style={styles.mask}></View>
+                </View>
+            )
         },
         "SELFIE": {
             "label": "Posisikan wajah dan e-KTP kamu berada di bingkai yang tersedia kemudian ambil foto.",
             "label2": "Pastikan wajah dan e-KTP kamu terlihat jelas dan tidak blur.",
-            "frame": null
+            "frame": (
+                <View style={styles.maskWrapper}>
+                    <View style={styles.person}></View>
+                    <View style={styles.ktp}></View>
+                </View>
+            )
         }
     }
 
     const doCapture = async () => {
-        const data = await takePicture({ quality: 0.5, base64: true });
-        setImg64(data.base64);
+        const data = await takePicture({ quality: 0.5 });
+        setImg64(data.uri);
     }
 
     if (img64) {
@@ -42,7 +51,7 @@ export default ({navigation, route, initialProps}) => {
             <View style={{...styles.scaffold, backgroundColor: '#000'}}>
                 <View style={{flex: 1, padding: 20}}>
                     <Image 
-                        source={{uri: `data:image/jpeg;base64,${img64}`}} 
+                        source={{uri: img64}} 
                         style={{
                             backgroundColor: '#FFF',
                             width: '100%',
@@ -94,11 +103,7 @@ export default ({navigation, route, initialProps}) => {
         <View style={styles.scaffold}>
             <MaskedView
                 style={styles.maskedView}
-                maskElement={
-                <View style={styles.maskWrapper}>
-                    <View style={styles.mask}></View>
-                </View>
-            }>
+                maskElement={dataCamera[typeCamera].frame}>
                 <RNCamera
                     ref={cameraRef}
                     autoFocusPointOfInterest={autoFocusPoint.normalized}

@@ -15,6 +15,7 @@ const TextArea = ({control, name, placeholder="", rules={}, defaultValue=""}) =>
     });
     return <TextInput
         placeholder={placeholder}
+        placeholderTextColor="#999999"
         onBlur={inputProps.onBlur}
         onChangeText={inputProps.onChange}
         value={inputProps.value}
