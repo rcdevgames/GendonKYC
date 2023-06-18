@@ -8,7 +8,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { Picker } from '@react-native-picker/picker';
 import { IMG_ExampleKTP, IMG_ExampleSelfie, IMG_Hore, IMG_VerifyKTP } from '../Assets';
 import {setLoading} from '../Components';
-import { insertBiodata } from '../Provider';
+import { insertBiodata, uploadFoto } from '../Provider';
 
 export default ({navigation, route}) => {
     const toast = useToast();
@@ -27,16 +27,20 @@ export default ({navigation, route}) => {
         setLoading(true);
         try {
             const res = await uploadFoto(uri, type.toLowerCase());
-            console.log(res);
             setLoading(false);
-            if (type === "KTP") {
-                setStep(3);
-            }else if (type === "SELFIE") {
-                navigation.navigate("ResultPage", {status: "WAITING"});
+            if (res) {
+                console.log(res);
+                if (type === "KTP") {
+                    setStep(3);
+                }else if (type === "SELFIE") {
+                    navigation.navigate("ResultPage", {status: "WAITING"});
+                }
+            }else {
+                toast.show(res.message)
             }
         } catch (error) {
             console.log(error)
-            toast.show(error);
+            toast.show(error.toString());
             setLoading(false);
         }
     }
@@ -50,7 +54,7 @@ export default ({navigation, route}) => {
             setStep(2);
         } catch (error) {
             console.log(error)
-            toast.show(error);
+            toast.show(error.toString());
             setLoading(false);
         }
     }
@@ -168,17 +172,17 @@ export default ({navigation, route}) => {
                     <Text style={{fontSize: 17}}>Verifikasi e-KTP</Text>
                     <Text style={{fontSize: 12, color: '#7A7A7A', marginTop: 10}}>Teken ikon kamera, foto kartu e-KTP dan kami akan memverifikasi data kamu.</Text>
                     <Image source={IMG_VerifyKTP} resizeMode={'contain'} style={{
-                        width: wp(60),
-                        height: wp(60),
+                        width: wp(55),
+                        height: wp(55),
                         alignSelf: 'center',
                         marginTop: -40
                     }}/>
                     <Text style={{fontSize: 17, marginTop: -25}}>Panduan Foto e-KTP</Text>
                     <Image source={IMG_ExampleKTP} resizeMode={'contain'} style={{
-                        width: wp(60),
-                        height: wp(60),
+                        width: wp(55),
+                        height: wp(55),
                         alignSelf: 'center',
-                        marginTop: -40
+                        marginTop: -35
                     }}/>
                     <View style={{flex: 1}}/>
                     <Button text="Ambil Foto" style={{margin: 16}} onPress={() => navigation.navigate("CameraPage", {type: "KTP", callback: callbackCamera})}/>
@@ -187,15 +191,15 @@ export default ({navigation, route}) => {
                     <Text style={{fontSize: 17}}>Selfie dengan e-KTP</Text>
                     <Text style={{fontSize: 12, color: '#7A7A7A', marginTop: 10}}>Foto selfie sambil menunjukan e-KTP kamu, posisikan kepala dan e-KTP kamu sesuai dengan layout yang sudah disediakan.</Text>
                     <Image source={IMG_Hore} resizeMode={'contain'} style={{
-                        width: wp(60),
-                        height: wp(60),
+                        width: wp(55),
+                        height: wp(55),
                         alignSelf: 'center',
                         marginTop: -40
                     }}/>
                     <Text style={{fontSize: 17, marginTop: -25}}>Panduan Foto selfie dengan e-KTP</Text>
                     <Image source={IMG_ExampleSelfie} resizeMode={'contain'} style={{
-                        width: wp(60),
-                        height: wp(60),
+                        width: wp(55),
+                        height: wp(55),
                         alignSelf: 'center',
                         marginTop: -40
                     }}/>

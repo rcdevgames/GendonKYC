@@ -33,15 +33,17 @@ export const sys_get = async ({auth = false, endpoint = ''}) => {
 export const sys_post = async ({auth = false, endpoint = '', body = {}}) => {
   let token = await getToken();
   var callback = callbackModel;
+  console.log(body, ' | ', API_URL + endpoint);
   const response = await fetch(API_URL + endpoint, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
+      Accept: '*/*',
       'Content-Type': 'multipart/form-data',
       'x-key': auth ? token : '',
     },
     body: json2FormData(body),
   });
+  // console.log(response);
   const data = await response.json();
   callback.code = response.status;
   callback.status = response.status == 200 || response.status == 201;
@@ -56,5 +58,6 @@ const json2FormData = (json) => {
   for(let idx in json) {
     fData.append(idx, json[idx])
   }
+  console.log(fData);
   return fData
 }

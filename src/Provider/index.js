@@ -5,7 +5,7 @@ import {setUserdata} from '../Utils/state';
 export const getStatus = async () => {
     await register();
     let response = await sys_get({auth: true, endpoint: "kyc/status"});
-    console.log(response);
+    // console.log(response);
     if (response.status) {
         setUserdata(response.data);
         return response.data;
@@ -20,7 +20,7 @@ export const register = async (reinit=false) => {
         "member_id": 1,
         "username": "diego"
     }});
-    console.log(response)
+    // console.log(response);
     if (response.status) {
         await saveToken(response.data?.kyc_request?.key || null);
         return true;
@@ -30,18 +30,19 @@ export const register = async (reinit=false) => {
 
 export const insertBiodata = async (data) => {
     let response = await sys_post({auth: true, endpoint: "kyc/kyc-member", body: data});
+    // console.log(response);
     if (response.status) return true;
-    console.log(response);
     return false;
 }
 
 export const uploadFoto = async (uri, type="ktp") => {
-    let response = await sys_post({auth: true, endpoint: `kyc/${type}`, body: {
+    let body = {};
+    body[`${type}_file`] = {
         uri,
-        type: "JPEG",
+        type: "image/jpeg",
         name: `${type}.jpg`,
-    }});
-    if (response.status) return true;
-    console.log(response);
-    return false;
+    };
+    let response = await sys_post({auth: true, endpoint: `kyc/${type}`, body});
+    // console.log(response);
+    return response.status;
 }
