@@ -28,7 +28,7 @@ export default ({navigation}) => {
             setLoading(false);
         } catch (error) {
             console.log(error)
-            toast.show(error);
+            toast.show(error.toString());
             setLoading(false);
         }
     }
