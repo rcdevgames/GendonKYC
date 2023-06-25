@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {CameraPage,HomePage,ResultPage,VerifyFormPage} from '../Pages';
+import {CameraPage,HomePage,ResultPage,VerifyFormPage,LoginPage,RegisterPage} from '../Pages';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +16,17 @@ export default () => {
                     fontWeight: 'bold'
                 }
             }}
-            initialRouteName="HomePage"
+            initialRouteName="LoginPage"
         >
+            <Stack.Screen 
+                name="LoginPage"
+                component={LoginPage}
+                options={{headerShown: false}}
+            />
+            <Stack.Screen 
+                name="RegisterPage"
+                component={RegisterPage}
+            />
             <Stack.Screen 
                 name="HomePage"
                 component={HomePage}

@@ -7,7 +7,7 @@ const callbackModel = {
   data: null,
 };
 
-const API_URL = "http://kyc.rcdevgames.net/api/";
+const API_URL = "http://kyc-api.blackbox-webstudio.com/public/api/";
 
 export const sys_get = async ({auth = false, endpoint = ''}) => {
   

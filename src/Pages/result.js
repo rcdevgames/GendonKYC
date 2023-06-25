@@ -1,12 +1,16 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import { IMG_Approved, IMG_Process, IMG_Reject } from '../Assets';
-import { Button, Gap } from '../Components';
+import { Button, Gap, setLoading } from '../Components';
 import styles from './style';
 import { widthPercentageToDP as wp } from '../Utils/responsive';
+import {register} from '../Provider';
+import { useToast } from 'react-native-toast-notifications';
 
 export default ({navigation, route}) => {
+    const toast = useToast();
     let status = route.params?.status || 'WAITING';
+    let msg = route.params?.msg || '';
     let data = {
         "WAITING": {
             "image": IMG_Process,
@@ -22,6 +26,18 @@ export default ({navigation, route}) => {
         },
     };
 
+    const recreate = async () => {
+        setLoading(true);
+        try {
+            await register(true);
+            setLoading(false);
+            navigation.replace("HomePage");
+        } catch (error) {
+            toast.show(error.toString());
+            setLoading(false);
+        }
+    }
+
     return (
         <View style={styles.scaffold}>
             <View style={styles.content_center}>
@@ -29,9 +45,16 @@ export default ({navigation, route}) => {
                     width: wp(90),
                     height: wp(90)
                 }}/>
+                {status === "REJECTED" && <Text style={{fontSize: wp(5)}}>{msg}</Text>}
             </View>
             <View style={styles.content_button_bottom}>
-                <Button onPress={() => navigation.replace("HomePage")} text={data[status].btn_label}/>
+                <Button onPress={() => {
+                    if (status === "REJECTED") {
+                        recreate();
+                    }else {
+                        navigation.replace("HomePage");
+                    }
+                }} text={data[status].btn_label}/>
                 <Gap height={10}/>
             </View>
         </View>

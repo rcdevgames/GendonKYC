@@ -12,7 +12,7 @@ import { insertBiodata, uploadFoto } from '../Provider';
 
 export default ({navigation, route}) => {
     const toast = useToast();
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm();
+    const { control, handleSubmit, formState: { errors }} = useForm();
 
     const [step, setStep] = useState(route.params?.step || 1);
 
